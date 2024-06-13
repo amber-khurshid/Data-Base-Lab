@@ -1,0 +1,39 @@
+2024-03-13T15:47:38.950087Z	    9 Query	select distinct emp_fname, emp_lname
+ from employee
+where emp_num in (select emp_num
+from hours
+where hour_rate > (select avg(hour_rate) from hours))
+c:\wamp64\bin\mysql\mysql8.2.0\bin\mysqld.exe, Version: 8.2.0 (MySQL Community Server - GPL). started with:
+TCP Port: 3306, Named Pipe: /tmp/mysql.sock
+Time                 Id Command    Argument
+2024-03-14T15:52:38.202925Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-03-14T15:53:30.441871Z	    8 Connect	root@localhost on  using SSL/TLS
+2024-03-14T15:53:30.455232Z	    8 Query	select @@version_comment limit 1
+2024-03-14T15:53:36.232324Z	    8 Query	SELECT DATABASE()
+2024-03-14T15:53:36.234665Z	    8 Init DB	themepark
+2024-03-14T15:57:08.557062Z	    8 Query	select emp_fname, emp_lname, date_worked, (select avg(hours_per_attract) from hours) as average, hours_per_attract - (select avg(hours_per_attract) from hours) as difference from employee natural join hours
+2024-03-14T16:02:31.058236Z	    8 Query	select park_code, park_name, park_country
+from themepark
+where exists (select park_code from sales where sales.park_code = themepark.park_code)
+2024-03-14T16:04:49.365072Z	    8 Query	select transaction_no , line_no, line_qty, line_price 
+from sales_line sl
+where sl.line_qty > (select avg(line_qty) from sales_line sa
+where sa.transaction_no = sl.transaction_no)
+2024-03-14T16:14:52.009874Z	    8 Query	select park_code, park_name, park_country
+from themepark
+ where not exists (
+select *
+from sales
+where sales.park_code = themepark.park_code and sale_date >= date_sub(now(), interval 30 day))
+2024-03-14T16:16:26.377069Z	    8 Query	select attract_no, attract_name, attract_capacity
+from attraction 
+where attract_capacity <= (select avg(attract_capacity)
+from attraction)

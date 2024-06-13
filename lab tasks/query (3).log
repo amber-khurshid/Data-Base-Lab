@@ -1,0 +1,35 @@
+2024-03-19T20:17:32.169676Z	    8 Query	SET GLOBAL general_log = 'ON'
+2024-03-19T20:17:38.862409Z	    8 Query	SELECT DATABASE()
+2024-03-19T20:17:38.864622Z	    8 Init DB	themepark
+2024-03-19T20:19:53.928858Z	    8 Query	create view emp_worked as 
+select e.emp_lname, e.emp_fname, h.attract_no, h.date_worked
+from employee E join hours H
+ON e.emp_num = h.emp_num
+2024-03-19T20:20:22.025129Z	    8 Query	select * from emp_worked
+2024-03-19T20:20:42.727542Z	    8 Query	drop view emp_worked
+2024-03-19T20:21:11.411033Z	    8 Query	select * from emp_worked
+2024-03-19T20:21:39.151728Z	    8 Query	select distinct(sale_date)
+from sales
+2024-03-19T20:22:40.406488Z	    8 Query	select distinct(date_format(sale_date, '%D %b %Y'))
+from sales
+2024-03-19T20:23:20.863405Z	    8 Query	select current_date(), current_time()
+2024-03-19T20:25:14.068624Z	    8 Query	select dayofmonth(emp_dob) as "Day", MONTH(EMP_DOB) as "Month", 
+YEAR(emp_dob) as "year"
+from employees
+2024-03-19T20:25:42.006049Z	    8 Query	select dayofmonth(emp_dob) as "Day", MONTH(EMP_DOB) as "Month",
+ YEAR(emp_dob) as "year"
+from employee
+2024-03-19T20:27:22.066645Z	    8 Query	select emp_lname, emp_fname, emp_dob,
+date_format(emp_dob, '%b') as month
+from employee
+where month(emp_dob)='11'
+2024-03-19T20:28:17.288836Z	    8 Query	select DATEDIFF('2008-12-25', '2008-01-01')
+2024-03-19T20:29:15.727873Z	    8 Query	select datediff('current_date()', '2008-12-25')
+2024-03-19T20:30:02.922339Z	    8 Query	select datediff(current_date(), '2008-12-25')
+2024-03-19T20:31:17.502239Z	    8 Query	select adddate('2008-01-01', interval 11 month)
+2024-03-19T20:32:51.799931Z	    8 Query	select emp_lname, emp_fname, emp_hire_date,
+adddate(emp_hire_date, interval 12 month) as "first appraisal"
+from employee
+2024-03-19T20:33:41.327982Z	    8 Query	select *
+from sales
+where sale_date >= last_day(sale_date) -20
